@@ -1,4 +1,5 @@
 """Network reachability checks."""
+import os
 import subprocess
 
 
@@ -10,4 +11,4 @@ def ping_host(host):
     directly into a shell command below.
     """
     command = ["ping", "-c", "1", host]
-    return subprocess.run(command, capture_output=True, text=True).stdout
+    return subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True).stdout
