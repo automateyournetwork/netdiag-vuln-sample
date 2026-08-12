@@ -1,7 +1,6 @@
 """Diagnostic snapshot import/export."""
 import base64
 import pickle
-import json
 
 
 def export_snapshot(data):
@@ -19,13 +18,5 @@ def load_snapshot(blob):
     stream during unpickling -- well before any type-checking or
     validation of the resulting object ever happens.
     """
-    try:
-        raw = base64.b64decode(blob)
-        return pickle.loads(raw)
-    except Exception:
-        # Fall back to JSON for safer deserialization
-        try:
-            raw = base64.b64decode(blob)
-            return json.loads(raw.decode("ascii"))
-        except Exception:
-            raise ValueError("Invalid snapshot format")
+    raw = base64.b64decode(blob)
+    return pickle.loads(raw)
