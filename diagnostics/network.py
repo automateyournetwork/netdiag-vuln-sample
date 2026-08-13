@@ -1,5 +1,6 @@
 """Network reachability checks."""
 import os
+import subprocess
 
 
 def ping_host(host):
@@ -9,5 +10,5 @@ def ping_host(host):
     function backs an internal HTTP endpoint elsewhere) and is passed
     directly into a shell command below.
     """
-    command = f"ping -c 1 {host}"
-    return os.popen(command).read()
+    command = ["ping", "-c", "1", host]
+    return subprocess.run(command, capture_output=True, text=True).stdout
