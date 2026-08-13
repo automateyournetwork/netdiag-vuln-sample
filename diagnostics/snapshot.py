@@ -1,7 +1,6 @@
 """Diagnostic snapshot import/export."""
 import base64
 import pickle
-import json
 
 
 def export_snapshot(data):
@@ -20,10 +19,4 @@ def load_snapshot(blob):
     validation of the resulting object ever happens.
     """
     raw = base64.b64decode(blob)
-    try:
-        # Try to load as pickle first for backward compatibility
-        # WARNING: Only accept pickles from trusted sources, never untrusted input
-        return pickle.loads(raw)
-    except Exception:
-        # If pickle fails, try to load as JSON (safer alternative)
-        return json.loads(raw.decode("ascii"))
+    return pickle.loads(raw)
