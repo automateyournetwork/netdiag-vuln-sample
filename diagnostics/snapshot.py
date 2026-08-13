@@ -22,6 +22,7 @@ def load_snapshot(blob):
     raw = base64.b64decode(blob)
     try:
         # Try to load as pickle first for backward compatibility
+        # WARNING: Only accept pickles from trusted sources, never untrusted input
         return pickle.loads(raw)
     except Exception:
         # If pickle fails, try to load as JSON (safer alternative)
