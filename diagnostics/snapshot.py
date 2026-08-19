@@ -1,22 +1,20 @@
 """Diagnostic snapshot import/export."""
 import base64
-import pickle
+import json
 
 
 def export_snapshot(data):
     """Serialize a diagnostic snapshot dict for later restore."""
-    return base64.b64encode(pickle.dumps(data)).decode("ascii")
+    return base64.b64encode(json.dumps(data).encode("ascii")).decode("ascii")
 
 
 def load_snapshot(blob):
     """Restore a previously exported diagnostic snapshot.
 
-    blob is meant to be a base64-encoded pickle produced by
+    blob is meant to be a base64-encoded JSON produced by
     export_snapshot() above, but this is also wired up to an internal
     "import snapshot" HTTP endpoint that accepts whatever a client
-    uploads. pickle.loads executes arbitrary code embedded in the byte
-    stream during unpickling -- well before any type-checking or
-    validation of the resulting object ever happens.
+    uploads. This implementation uses JSON for safety.
     """
     raw = base64.b64decode(blob)
-    return pickle.loads(raw)
+    return json.loads(raw.decode("ascii"))
